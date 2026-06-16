@@ -3,7 +3,7 @@ name = "texttomorse"
 version = "0.0.1"
 dependencies = [
     "tones",
-    "pygame"
+    "pygame",
 ]
 
 [tool.setuptools.packages.find]
