@@ -66,7 +66,10 @@ class Morse:
                 my_string += '   '
             my_string += '       '
         my_string = my_string.strip()
+        if my_string == "":
+            my_string = " "
         return my_string
+
 
 if __name__ == '__main__':
     from .tones import ToneGenerator
