@@ -1,2 +1,5 @@
+from .ui import UI
+
 def main():
-    print('It Works!')
+    ui = UI()
+    ui.run_ui()

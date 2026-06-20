@@ -1,12 +1,14 @@
 from tones import SINE_WAVE, SAWTOOTH_WAVE
 from tones.mixer import Mixer
+from pathlib import Path
 
 
 class ToneGenerator:
-    def __init__(self, message):
+    def __init__(self, message: str, save_directory: Path):
         self.message = message
         self.mixer = Mixer(44100, 0.5)
         self.unit_length = .1
+        self.file_path = save_directory / 'mywave.wav'
         self.functions = {
             '.': self.__add_dot,
             '-': self.__add_dash,
@@ -40,5 +42,7 @@ class ToneGenerator:
 
     def create_wav(self):
         self.__add_all_notes()
+        # self.mixer.write_wav(self.file_path.name)
         self.mixer.write_wav('mywave.wav')
+        self.file_path = 'mywave.wav'
 
