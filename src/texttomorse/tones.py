@@ -1,7 +1,8 @@
-from tones import SINE_WAVE, SAWTOOTH_WAVE
-from tones.mixer import Mixer
 from pathlib import Path
 import time
+
+from tones import SINE_WAVE, SAWTOOTH_WAVE
+from tones.mixer import Mixer
 
 
 class ToneGenerator:

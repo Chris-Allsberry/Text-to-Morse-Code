@@ -1,6 +1,3 @@
-from rich.console import Console
-from rich.rule import Rule
-from rich.spinner import Spinner
 import os
 from dataclasses import dataclass
 from typing import Callable, Optional
@@ -9,9 +6,14 @@ import datetime as dt
 from tempfile import TemporaryDirectory
 from pathlib import Path
 
+from rich.console import Console
+from rich.rule import Rule
+from rich.progress import track
+
 from .morse import Morse
 from .tones import ToneGenerator
 from .player import SoundPlayer
+from .art import Gallery
 
 
 @dataclass(frozen=True)
@@ -22,6 +24,7 @@ class NextScreen:
 
 class UI:
     def __init__(self):
+        self.art = Gallery()
         self.console = Console()
         self.temp_dir = TemporaryDirectory()
         self.power_on = True
@@ -34,20 +37,20 @@ class UI:
         os.system(command)
 
     def __rule(self):
-        message = "Test to Morse Converter"
+        message = "Text to Morse Converter"
         self.console.print(Rule(message))
 
     def screen_welcome(self) -> NextScreen:
         self.__clear_screen()
         self.__rule()
-        self.console.print('Welcome')
+        self.console.print(self.art.welcome)
         self.console.input('Enter to Continue...')
         return NextScreen(func=self.screen_input_morse)
 
     def screen_goodbye(self):
         self.__clear_screen()
         self.__rule()
-        self.console.print('GoodBye!!')
+        self.console.print(self.art.goodbye)
         self.power_on = False
         time.sleep(1)
         self.__clear_screen()
@@ -58,7 +61,7 @@ class UI:
         while not message_ok:
             self.__clear_screen()
             self.__rule()
-            prompt = 'Enter a phrase!!: '
+            prompt = 'Enter a phrase to translate: '
             message = self.console.input(prompt=prompt)
             if len(message) > 0:
                 message_ok = True
@@ -92,13 +95,18 @@ class UI:
         while not user_selection_ok:
             self.__clear_screen()
             self.__rule()
-            self.console.print(f'Original Text: {message}\n')
-            self.console.print(f'Morse Code: {morse}\n')
+            original_text = f'[red]Original Text:[/red] [bold]{message}[/bold]\n'
+            self.console.print(original_text)
+            morse_text = f'[green]Morse Code:[/green] [bold on blue]{morse}[/bold on blue]\n'
+            self.console.print(morse_text)
             if not audio_played:
                 pl = SoundPlayer(filepath)
                 pl.play_audio()
+                for i in track(range(pl.sound_length), description="Playing..."):
+                    time.sleep(1)
                 audio_played = True
-            us = self.console.input('Would you like to do another? (y/n): ')
+            ask_prompt = 'Would you like to do another? ([green]y[/green]/[red]n[/red]): '
+            us = self.console.input(ask_prompt)
 
             if us.lower() in ('y', 'n'):
                 user_selection_ok = True

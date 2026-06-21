@@ -69,11 +69,3 @@ class Morse:
         if my_string == "":
             my_string = " "
         return my_string
-
-
-if __name__ == '__main__':
-    from .tones import ToneGenerator
-    message = 'Hi My Name is Chris!'
-    ms = Morse(message=message)
-    tg = ToneGenerator(ms.morse_code)
-    tg.create_wav()

@@ -13,4 +13,4 @@ where = ["src"]  # ["."] by default
 include = ["texttomorse*"]  # ["*"] by default
 
 [project.scripts]
-ttm = "texttomorse:main"
+morsecode = "texttomorse:main"
